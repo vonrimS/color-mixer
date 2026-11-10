@@ -49,9 +49,16 @@ The current mixed color is global state, not tied to a specific entity. A `Resou
 ```bash
 color-mixer/
 ├── Cargo.toml
-├── src/
-│ └── main.rs
-└── README.md
+├── assets/
+└── src/
+    ├── main.rs         # Entry point: engine initialization & plugins
+    ├── states.rs       # AppState enum
+    ├── components.rs   # ECS components (BlockColor, MenuTag)
+    ├── resources.rs    # Global resources (MixColor)
+    └── screens/
+        ├── mod.rs      # Screen module re-exports
+        ├── menu.rs     # Menu setup and input systems
+        └── game.rs     # Game setup and block click logic
 ```
 
 

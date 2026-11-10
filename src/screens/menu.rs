@@ -1,6 +1,6 @@
-use bevy::prelude::*;
-use crate::states::AppState;
 use crate::components::MenuTag;
+use crate::states::AppState;
+use bevy::prelude::*;
 
 pub fn setup_menu(mut commands: Commands) {
     // Spawn 2D camera for the menu UI

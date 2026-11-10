@@ -1,6 +1,7 @@
-use bevy::prelude::*;
-use crate::resources::MixColor;
 use crate::components::BlockColor;
+use crate::events::ColorMixedEvent;
+use crate::resources::MixColor;
+use bevy::prelude::*;
 
 pub fn setup_game(mut commands: Commands) {
     // Spawn 2D camera for the game view
@@ -38,27 +39,35 @@ pub fn setup_game(mut commands: Commands) {
         });
 }
 
-// Handle global click inputs to mix colors
-pub fn block_click(
+// System 1: Captures mouse input and emits a color mixing message
+// completely decoupled from the actual state mutation logic
+pub fn handle_input(
     mouse_button: Res<ButtonInput<MouseButton>>,
-    mut mix: ResMut<MixColor>,
+    mut messages: MessageWriter<ColorMixedEvent>,
 ) {
     if mouse_button.just_pressed(MouseButton::Left) {
+        messages.write(ColorMixedEvent);
+    }
+}
+
+// System 2: Listens for color mixing messages and updates the global MixColor resource reactively
+pub fn handle_color_events(
+    mut messages: MessageReader<ColorMixedEvent>,
+    mut mix: ResMut<MixColor>,
+) {
+    for _event in messages.read() {
         let current = mix.0.to_srgba();
-        // Blend color towards brighter shades on each click
         mix.0 = Color::srgb(
             (current.red + 0.3).min(1.0),
             (current.green + 0.3).min(1.0),
             (current.blue + 0.3).min(1.0),
         );
+        info!("ColorMixedEvent received! Updating mix color.");
     }
 }
 
 // Update window clear color whenever MixColor resource changes
-pub fn update_background(
-    mix: Res<MixColor>,
-    mut clear: ResMut<ClearColor>,
-) {
+pub fn update_background(mix: Res<MixColor>, mut clear: ResMut<ClearColor>) {
     if mix.is_changed() {
         clear.0 = mix.0;
     }

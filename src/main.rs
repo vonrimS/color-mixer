@@ -27,7 +27,12 @@ fn main() {
         .add_systems(OnEnter(AppState::Playing), setup_game)
         .add_systems(
             Update,
-            (handle_input, handle_color_events, update_background)
+            (
+                handle_input,
+                handle_color_events,
+                update_background,
+                block_movement_system,
+            )
                 .run_if(in_state(AppState::Playing)),
         )
         .run();

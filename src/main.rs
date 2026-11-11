@@ -32,6 +32,7 @@ fn main() {
                 handle_color_events,
                 update_background,
                 block_movement_system,
+                flash_cooldown_system,
             )
                 .run_if(in_state(AppState::Playing)),
         )

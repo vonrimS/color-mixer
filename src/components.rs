@@ -10,3 +10,7 @@ pub struct MenuTag;
 
 #[derive(Component, Debug)]
 pub struct Velocity(pub f32);
+
+#[allow(dead_code)]
+#[derive(Component)]
+pub struct FlashTimer(pub Timer);
